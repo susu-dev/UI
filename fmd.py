@@ -19,7 +19,7 @@ from PyQt5 import QtGui
 load_ui = uic.loadUiType("fmd.ui")[0]
 print(load_ui)
 
-# .py 파일 불러오기
+# mask_detecting.py 파일 불러와서 mOpen/mClose 버튼과 연동시킬 수는 없을까?
 
 class WindowClass (QMainWindow, load_ui) :
     def __init__(self):
