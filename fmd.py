@@ -1,4 +1,12 @@
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+import tensorflow as tf
 import cv2
+import numpy as np
+import imutils
+from imutils.video import VideoStream
+import time
+from tensorflow.keras.models import load_model
 import sys
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import *
@@ -6,62 +14,12 @@ from PyQt5 import uic
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 
+
 # UI파일 연결
 load_ui = uic.loadUiType("fmd.ui")[0]
 print(load_ui)
 
-class ShowVideo(QtCore.QObject):
-
-    flag = 0
-
-    cam = cv2.VideoCapture(0)
-
-    ret, image = cam.read()
-    height, width = image.shape[:2]
-
-    mVideo = QtCore.pyqtSignal(QtGui.QImage)
-    tVideo = QtCore.pyqtSignal(QtGui.QImage)
-
-    def __init__(self, parent=None):
-        super(ShowVideo, self).__init__(parent)
-
-    @QtCore.pyqtSlot()
-    def startVideo(self):
-        global image
-
-        run_video = True
-        while run_video:
-            ret, image = self.cam.read()
-            color_swapped_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-
-            qt_image1 = QtGui.QImage(color_swapped_image.data,
-                                    self.width,
-                                    self.height,
-                                    color_swapped_image.strides[0],
-                                    QtGui.QImage.Format_RGB888)
-            self.VideoSignal1.emit(qt_image1)
-
-
-            if self.flag:
-                img_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-                img_canny = cv2.Canny(img_gray, 50, 100)
-
-                qt_image2 = QtGui.QImage(img_canny.data,
-                                         self.width,
-                                         self.height,
-                                         img_canny.strides[0],
-                                         QtGui.QImage.Format_Grayscale8)
-
-                self.VideoSignal2.emit(qt_image2)
-
-
-            loop = QtCore.QEventLoop()
-            QtCore.QTimer.singleShot(25, loop.quit) #25 ms
-            loop.exec_()
-
-    @QtCore.pyqtSlot()
-    def canny(self):
-        self.flag = 1 - self.flag
+# .py 파일 불러오기
 
 class WindowClass (QMainWindow, load_ui) :
     def __init__(self):
@@ -110,3 +68,4 @@ if __name__ == "__main__":
 
     # 프로그램을 이벤트루프로 진입시키는 (프로그램을 작동시키는) 코드
     app.exec_()
+'''
